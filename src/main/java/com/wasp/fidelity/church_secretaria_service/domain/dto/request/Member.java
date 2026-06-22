@@ -7,20 +7,27 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "members")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
+    @NotBlank(message = "Full name is required")
+    @Column(nullable = false)
     private String fullName;
 
     private LocalDate dateOfBirth;
 
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be valid")
+    @Column(unique = true)
     private String email;
 
     private String mobilePhone;
@@ -28,9 +35,10 @@ public class Member {
     private LocalDate baptismDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private MemberStatus status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 }

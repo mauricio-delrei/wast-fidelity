@@ -25,4 +25,8 @@ public class MemberController {
     public List<Member> getAll() {
         return service.findAll();
     }
+    @GetMapping("/health")
+    public String health() {
+        return "OK";
+    }
 }

@@ -3,7 +3,7 @@ spring:
     name: church-secretariat-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/mydatabase #church_db
+    url: jdbc:postgresql://localhost:5432/church_db
     username: church_user
     password: church_pass
 
