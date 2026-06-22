@@ -1,7 +1,10 @@
 package com.wasp.fidelity.church_secretaria_service.controller;
 
 import com.wasp.fidelity.church_secretaria_service.domain.Member;
+import com.wasp.fidelity.church_secretaria_service.domain.dto.request.MemberRequest;
+import com.wasp.fidelity.church_secretaria_service.domain.dto.response.MemberResponse;
 import com.wasp.fidelity.church_secretaria_service.service.MemberService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,12 +20,12 @@ public class MemberController {
     }
 
     @PostMapping
-    public Member create(@RequestBody Member member) {
-        return service.save(member);
+    public MemberResponse create(@Valid @RequestBody MemberRequest request) {
+        return service.create(request);
     }
 
     @GetMapping
-    public List<Member> getAll() {
+    public List<MemberResponse> findAll() {
         return service.findAll();
     }
     @GetMapping("/health")
