@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id "org.openapi.generator" version "7.7.0"
 }
 
 group = 'com.wasp.fidelity'
@@ -30,6 +31,9 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core:10.15.2'
 	implementation 'org.flywaydb:flyway-database-postgresql:10.15.2'
 
+	//SWAGGER
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+
 	// DEV TOOLS
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -44,4 +48,11 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$rootDir/api.yaml"
+    outputDir = "$buildDir/generated"
+    apiPackage = "com.wasp.fidelity.api"
+    modelPackage = "com.wasp.fidelity.dto"
 }
