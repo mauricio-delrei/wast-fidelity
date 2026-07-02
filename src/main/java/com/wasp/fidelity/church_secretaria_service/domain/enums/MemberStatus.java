@@ -1,4 +1,4 @@
-package com.wasp.fidelity.church_secretaria_service.domain;
+package com.wasp.fidelity.church_secretaria_service.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

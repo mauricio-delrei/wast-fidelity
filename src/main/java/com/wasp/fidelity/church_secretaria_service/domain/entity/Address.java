@@ -1,18 +1,20 @@
-package com.wasp.fidelity.church_secretaria_service.domain;
+package com.wasp.fidelity.church_secretaria_service.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "addresses")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     @EqualsAndHashCode.Include
     private Long id;
 
     private String streetName;

@@ -23,18 +23,20 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// DATABASE
 	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'com.h2database:h2'
 
-	// MIGRATION (CORRIGIDO)
+	// MIGRATION
 	implementation 'org.flywaydb:flyway-core:10.15.2'
 	implementation 'org.flywaydb:flyway-database-postgresql:10.15.2'
 
-	//SWAGGER
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+	// SWAGGER (KEEP ONLY ONE VERSION)
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
-	// DEV TOOLS
+	// DEVTOOLS
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	// LOMBOK
@@ -44,18 +46,17 @@ dependencies {
 	// TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    //SWAGGER
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+	testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
 openApiGenerate {
-    generatorName = "spring"
-    inputSpec = "$rootDir/api.yaml"
-    outputDir = "$buildDir/generated"
-    apiPackage = "com.wasp.fidelity.api"
-    modelPackage = "com.wasp.fidelity.dto"
+	generatorName = "spring"
+	inputSpec = "$rootDir/api.yaml"
+	outputDir = "$buildDir/generated"
+	apiPackage = "com.wasp.fidelity.api"
+	modelPackage = "com.wasp.fidelity.dto"
 }
