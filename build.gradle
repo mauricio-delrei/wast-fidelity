@@ -1,62 +1,68 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.4'
-	id 'io.spring.dependency-management' version '1.1.6'
-	id "org.openapi.generator" version "7.7.0"
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id "org.openapi.generator" version "7.7.0"
 }
 
 group = 'com.wasp.fidelity'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	// CORE SPRING
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+    // CORE
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 
-	// DATABASE
-	runtimeOnly 'org.postgresql:postgresql'
-	runtimeOnly 'com.h2database:h2'
+    // DB
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'com.h2database:h2'
 
-	// MIGRATION
-	implementation 'org.flywaydb:flyway-core:10.15.2'
-	implementation 'org.flywaydb:flyway-database-postgresql:10.15.2'
+    // REDIS
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// SWAGGER (KEEP ONLY ONE VERSION)
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    // FLYWAY
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
 
-	// DEVTOOLS
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // OPENAPI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
-	// LOMBOK
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    // DEVTOOLS
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	// TEST
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testRuntimeOnly 'com.h2database:h2'
+    // LOMBOK
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // TEST
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 openApiGenerate {
-	generatorName = "spring"
-	inputSpec = "$rootDir/api.yaml"
-	outputDir = "$buildDir/generated"
-	apiPackage = "com.wasp.fidelity.api"
-	modelPackage = "com.wasp.fidelity.dto"
+    generatorName = "spring"
+    inputSpec = "$rootDir/api.yaml"
+    outputDir = "$buildDir/generated"
+    apiPackage = "com.wasp.fidelity.api"
+    modelPackage = "com.wasp.fidelity.dto"
 }

@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
 
   postgres:
@@ -37,9 +39,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
-      SCRIPT_NAME: ""
     ports:
-      - "5050:80"
+      - "5051:80"
     depends_on:
       postgres:
         condition: service_healthy
@@ -56,6 +57,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/church_db
       SPRING_DATASOURCE_USERNAME: church_user
       SPRING_DATASOURCE_PASSWORD: church_pass
