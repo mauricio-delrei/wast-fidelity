@@ -20,5 +20,4 @@ public interface MemberRepository {
 
     boolean existsByEmail(String email);
 
-    void delete(Member member);
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 public class UpdateMemberService implements UpdateMemberUseCase {
 
-    private MemberRepository repository;
+    private final MemberRepository repository;
 
     public UpdateMemberService(MemberRepository repository) {
         this.repository = repository;
@@ -22,21 +22,16 @@ public class UpdateMemberService implements UpdateMemberUseCase {
         Member existing = repository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(id));
 
-        Member merged = merge(existing, updatedData);
+        Member merged = existing.update(
+                updatedData.getFullName(),
+                updatedData.getEmail(),
+                updatedData.getMobilePhone(),
+                updatedData.getDateOfBirth(),
+                updatedData.getBaptismDate(),
+                updatedData.getStatus(),
+                updatedData.getAddress()
+        );
         return repository.save(merged);
     }
 
-    private Member merge(Member existing, Member updated) {
-
-        return new Member.Builder()
-                .id(existing.getId())
-                .fullName(updated.getFullName() != null ? updated.getFullName() : existing.getFullName())
-                .email(updated.getEmail() != null ? updated.getEmail() : existing.getEmail())
-                .mobilePhone(updated.getMobilePhone() != null ? updated.getMobilePhone() : existing.getMobilePhone())
-                .dateOfBirth(updated.getDateOfBirth() != null ? updated.getDateOfBirth() : existing.getDateOfBirth())
-                .baptismDate(updated.getBaptismDate() != null ? updated.getBaptismDate() : existing.getBaptismDate())
-                .status(updated.getStatus() != null ? updated.getStatus() : existing.getStatus())
-                .address(updated.getAddress() != null ? updated.getAddress() : existing.getAddress())
-                .build();
-    }
 }

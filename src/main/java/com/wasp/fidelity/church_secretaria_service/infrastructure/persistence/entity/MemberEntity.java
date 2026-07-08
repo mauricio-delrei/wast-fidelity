@@ -4,12 +4,17 @@ import com.wasp.fidelity.church_secretaria_service.domain.enums.MemberStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "members")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,9 +41,41 @@ public class MemberEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MemberStatus status;
+    @Builder.Default
+    private MemberStatus status = MemberStatus.ACTIVE;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private AddressEntity address;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column
+    private LocalDateTime deactivatedAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    public void deactivate() {
+
+        if (this.status == MemberStatus.INACTIVE) {
+            return;
+        }
+
+        this.status = MemberStatus.INACTIVE;
+        this.deactivatedAt = LocalDateTime.now();
+    }
+
+    public void activate() {
+
+        if (this.status == MemberStatus.ACTIVE) {
+            return;
+        }
+
+        this.status = MemberStatus.ACTIVE;
+        this.deactivatedAt = null;
+    }
 }

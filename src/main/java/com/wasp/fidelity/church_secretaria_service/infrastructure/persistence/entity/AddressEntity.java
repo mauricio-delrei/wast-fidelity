@@ -20,7 +20,7 @@ public class AddressEntity {
     @UuidGenerator
     private UUID id;
 
-    @Column(name = "street_name")
+    @Column(name = "street")
     private String street;
 
     @Column(name = "house_number")

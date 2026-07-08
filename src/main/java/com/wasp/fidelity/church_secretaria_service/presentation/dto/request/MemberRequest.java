@@ -1,5 +1,6 @@
 package com.wasp.fidelity.church_secretaria_service.presentation.dto.request;
 
+
 import com.wasp.fidelity.church_secretaria_service.domain.enums.MemberStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -20,14 +21,12 @@ public record MemberRequest(
         String email,
 
         @NotBlank(message = "Mobile phone is required")
-        @Email(message = "Mobile phone must be valid")
         String mobilePhone,
 
         @Past(message = "Baptism date must be in the past")
         LocalDate baptismDate,
 
-        MemberStatus status,
-
-        AddressRequest address
+        AddressRequest address,
+        MemberStatus status
 ) {
 }

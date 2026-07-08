@@ -23,7 +23,7 @@ public class MemberController {
     private final GetMemberByIdUseCase getMemberByIdUseCase;
     private final GetAllMembersUseCase getAllMembersUseCase;
     private final UpdateMemberUseCase updateMemberUseCase;
-    private final DeleteMemberUseCase deleteMemberUseCase;
+    private final DeactivateMemberUseCase deactivateMemberUseCase;
 
     private final MemberDtoMapper mapper;
 
@@ -32,14 +32,14 @@ public class MemberController {
             GetMemberByIdUseCase getMemberByIdUseCase,
             GetAllMembersUseCase getAllMembersUseCase,
             UpdateMemberUseCase updateMemberUseCase,
-            DeleteMemberUseCase deleteMemberUseCase,
+            DeactivateMemberUseCase deactivateMemberUseCase,
             MemberDtoMapper mapper
     ) {
         this.createMemberUseCase = createMemberUseCase;
         this.getMemberByIdUseCase = getMemberByIdUseCase;
         this.getAllMembersUseCase = getAllMembersUseCase;
         this.updateMemberUseCase = updateMemberUseCase;
-        this.deleteMemberUseCase = deleteMemberUseCase;
+        this.deactivateMemberUseCase = deactivateMemberUseCase;
         this.mapper = mapper;
     }
 
@@ -93,11 +93,11 @@ public class MemberController {
                         response));
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<MemberResponse>> update(@PathVariable UUID id,
                                                               @Valid @RequestBody MemberRequest request) {
 
-        Member updated = updateMemberUseCase.execute(id,mapper.toDomain(request));
+        Member updated = updateMemberUseCase.execute(id,mapper.toDomainForUpdate(request));
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
@@ -108,15 +108,17 @@ public class MemberController {
         );
 
     }
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<ApiResponse<MemberResponse>> deactivate(
+            @PathVariable UUID id) {
 
-    public ResponseEntity<ApiResponse<MemberResponse>> delete(@PathVariable UUID id) {
-        deleteMemberUseCase.execute(id);
+        Member member = deactivateMemberUseCase.execute(id);
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
                         200,
-                        "Member deleted successfully",
-                        mapper.toResponse(null)
+                        "Member deactivated successfully",
+                        mapper.toResponse(member)
                 )
         );
     }

@@ -6,7 +6,7 @@ import java.util.UUID;
 public class MemberNotFoundException extends RuntimeException {
 
     public MemberNotFoundException(UUID id) {
-        super("Member not found with id: " + id);
+        super("Member with ID '" + id + "' was not found.");
     }
 
 }

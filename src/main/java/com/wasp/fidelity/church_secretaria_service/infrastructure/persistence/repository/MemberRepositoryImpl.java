@@ -23,6 +23,8 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public Member save(Member member) {
+        System.out.println("STATUS: " + member.getStatus());
+        System.out.println("DEACTIVATED AT: " + member.getDeactivatedAt());
         return mapper.toDomain(
                 jpaRepository.save(mapper.toEntity(member))
 
@@ -47,10 +49,5 @@ public class MemberRepositoryImpl implements MemberRepository {
                 .stream()
                 .map(mapper::toDomain)
                 .toList();
-    }
-
-    @Override
-    public void delete(Member member) {
-        jpaRepository.delete(mapper.toEntity(member));
     }
 }
