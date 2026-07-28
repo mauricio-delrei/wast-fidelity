@@ -31,12 +31,6 @@ public class MemberRepositoryImpl implements MemberRepository {
         );
     }
 
-
-    @Override
-    public boolean existsByEmail(String email) {
-        return jpaRepository.existsByEmail(email);
-    }
-
     @Override
     public Optional<Member> findById(UUID id) {
         return jpaRepository.findById(id)
@@ -49,5 +43,19 @@ public class MemberRepositoryImpl implements MemberRepository {
                 .stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+    @Override
+    public Optional<Member> findByMobilePhone(String mobilePhone) {
+
+        return jpaRepository
+                .findByMobilePhone(mobilePhone)
+                .map(mapper::toDomain);
+    }
+    @Override
+    public Optional<Member> findByEmail(String email) {
+
+        return jpaRepository
+                .findByEmail(email)
+                .map(mapper::toDomain);
     }
 }

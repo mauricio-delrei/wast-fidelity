@@ -3,7 +3,8 @@ package com.wasp.fidelity.church_secretaria_service.presentation.controller;
 
 import com.wasp.fidelity.church_secretaria_service.application.port.in.*;
 import com.wasp.fidelity.church_secretaria_service.domain.model.Member;
-import com.wasp.fidelity.church_secretaria_service.presentation.dto.request.MemberRequest;
+import com.wasp.fidelity.church_secretaria_service.presentation.dto.request.CreateMemberRequest;
+import com.wasp.fidelity.church_secretaria_service.presentation.dto.request.UpdateMemberRequest;
 import com.wasp.fidelity.church_secretaria_service.presentation.dto.response.ApiResponse;
 import com.wasp.fidelity.church_secretaria_service.presentation.dto.response.MemberResponse;
 import com.wasp.fidelity.church_secretaria_service.presentation.mapper.MemberDtoMapper;
@@ -78,7 +79,7 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<MemberResponse>> create(
-            @Valid @RequestBody MemberRequest request) {
+            @Valid @RequestBody CreateMemberRequest request) {
 
         Member member = mapper.toDomain(request);
 
@@ -95,7 +96,7 @@ public class MemberController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<MemberResponse>> update(@PathVariable UUID id,
-                                                              @Valid @RequestBody MemberRequest request) {
+                                                              @Valid @RequestBody UpdateMemberRequest request) {
 
         Member updated = updateMemberUseCase.execute(id,mapper.toDomainForUpdate(request));
 

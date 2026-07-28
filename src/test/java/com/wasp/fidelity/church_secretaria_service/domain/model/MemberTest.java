@@ -82,4 +82,27 @@ public class MemberTest {
         assertThat(activatedMember.getDeactivatedAt())
                 .isNull();
     }
+    @Test
+    void should_keep_original_member_when_deactivated() {
+
+        Member member = Member.create(
+                "Mauricio Del Rei",
+                "mauricio@test.com",
+                "+447700000000",
+                null,
+                null,
+                null
+        );
+
+
+        Member inactive = member.deactivate();
+
+
+        assertThat(member.getStatus())
+                .isEqualTo(MemberStatus.ACTIVE);
+
+
+        assertThat(inactive.getStatus())
+                .isEqualTo(MemberStatus.INACTIVE);
+    }
 }

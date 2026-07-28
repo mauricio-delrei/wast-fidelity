@@ -1,6 +1,7 @@
 package com.wasp.fidelity.church_secretaria_service.application.service;
 
 import com.wasp.fidelity.church_secretaria_service.application.port.out.MemberRepository;
+import com.wasp.fidelity.church_secretaria_service.domain.enums.MemberStatus;
 import com.wasp.fidelity.church_secretaria_service.domain.model.Member;
 import com.wasp.fidelity.church_secretaria_service.exception.MemberNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,5 +93,45 @@ public class DeactivateMemberServiceTest {
         verify(repository, never())
                 .save(any());
     }
+    @Test
+    void should_not_change_already_inactive_member() {
+
+        UUID memberId = UUID.randomUUID();
+
+        Member member = Member.create(
+                "Mauricio Del Rei",
+                "mauricio@test.com",
+                "+447700000000",
+                null,
+                null,
+                null
+        );
+
+        Member inactiveMember = member.deactivate();
+
+
+        when(repository.findById(memberId))
+                .thenReturn(Optional.of(inactiveMember));
+
+
+        when(repository.save(any(Member.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+
+        Member result = service.execute(memberId);
+
+
+        assertThat(result.getStatus())
+                .isEqualTo(MemberStatus.INACTIVE);
+
+
+        assertThat(result.getDeactivatedAt())
+                .isEqualTo(inactiveMember.getDeactivatedAt());
+
+
+        verify(repository)
+                .save(any(Member.class));
+    }
+
 
 }

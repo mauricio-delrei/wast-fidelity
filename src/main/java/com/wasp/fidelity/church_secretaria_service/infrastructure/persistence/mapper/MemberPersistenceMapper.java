@@ -12,8 +12,10 @@ import org.mapstruct.Mapping;
 )
 public interface MemberPersistenceMapper {
 
-    @Mapping(target = "deactivatedAt", source = "deactivatedAt")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     MemberEntity toEntity(Member domain);
+
 
     @Mapping(target = "deactivatedAt", source = "deactivatedAt")
     Member toDomain(MemberEntity entity);

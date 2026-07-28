@@ -1,18 +1,26 @@
 spring:
+
   datasource:
     url: jdbc:postgresql://postgres:5432/church_db
     username: church_user
     password: church_pass
     driver-class-name: org.postgresql.Driver
 
+
   jpa:
+
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+
 
   flyway:
     enabled: true
     baseline-on-migrate: true
 
-  redis:
-    host: redis
-    port: 6379
+
+  data:
+    redis:
+      host: redis
+      port: 6379

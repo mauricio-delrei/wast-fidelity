@@ -5,6 +5,7 @@ import com.wasp.fidelity.church_secretaria_service.domain.model.Address;
 import com.wasp.fidelity.church_secretaria_service.domain.model.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+//@DataJpaTest
 @ActiveProfiles("test")
 class MemberPersistenceTest {
 
@@ -33,7 +35,7 @@ class MemberPersistenceTest {
 
         Member member = Member.create(
                 "Mauricio Test",
-                "mauricio@test.com",
+                "mauricio@test.com",//
                 "07123456789",
                 LocalDate.of(1990, 1, 1),
                 null,
@@ -51,5 +53,7 @@ class MemberPersistenceTest {
 
         assertThat(saved.getAddress().street())
                 .isEqualTo("High Street");
+
+
     }
 }

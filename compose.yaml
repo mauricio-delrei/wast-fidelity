@@ -1,68 +1,153 @@
-version: "3.9"
-
 services:
 
   postgres:
     image: postgres:16
     container_name: church-postgres
     restart: unless-stopped
+
     environment:
-      POSTGRES_DB: church_db
-      POSTGRES_USER: church_user
-      POSTGRES_PASSWORD: church_pass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     ports:
       - "5432:5432"
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U church_user -d church_db"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+    networks:
+      - church-network
+
 
   redis:
     image: redis:7-alpine
     container_name: church-redis
     restart: unless-stopped
+
     ports:
       - "6379:6379"
-    command: redis-server --appendonly yes
+
+    command:
+      - redis-server
+      - --appendonly yes
+
     volumes:
       - redis_data:/data
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "redis-cli",
+          "ping"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - church-network
+
+
 
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: church-pgadmin
     restart: unless-stopped
+
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+
     ports:
       - "5051:80"
-    depends_on:
-      postgres:
-        condition: service_healthy
+
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
-  app:
-    build: .
-    container_name: church-app
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
     depends_on:
       postgres:
         condition: service_healthy
+
+    networks:
+      - church-network
+
+
+
+  app:
+    build: .
+
+    container_name:
+      church-app
+
+    restart:
+      unless-stopped
+
+    ports:
+      - "8080:8080"
+
     environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/church_db
-      SPRING_DATASOURCE_USERNAME: church_user
-      SPRING_DATASOURCE_PASSWORD: church_pass
+
+      SPRING_PROFILES_ACTIVE:
+        docker
+
+      SPRING_DATASOURCE_URL:
+        jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+
+      SPRING_DATASOURCE_USERNAME:
+        ${POSTGRES_USER}
+
+      SPRING_DATASOURCE_PASSWORD:
+        ${POSTGRES_PASSWORD}
+
+      SPRING_REDIS_HOST:
+        redis
+
+      SPRING_REDIS_PORT:
+        6379
+
+
+    depends_on:
+
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+
+    networks:
+      - church-network
+
+
 
 volumes:
+
   postgres_data:
+    name: church-postgres-data
+
   redis_data:
+    name: church-redis-data
+
   pgadmin_data:
+    name: church-pgadmin-data
+
+
+
+networks:
+
+  church-network:
+    name: church-network

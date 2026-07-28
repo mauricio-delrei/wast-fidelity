@@ -1,7 +1,8 @@
 package com.wasp.fidelity.church_secretaria_service.presentation.mapper;
 
 import com.wasp.fidelity.church_secretaria_service.domain.model.Member;
-import com.wasp.fidelity.church_secretaria_service.presentation.dto.request.MemberRequest;
+import com.wasp.fidelity.church_secretaria_service.presentation.dto.request.CreateMemberRequest;
+import com.wasp.fidelity.church_secretaria_service.presentation.dto.request.UpdateMemberRequest;
 import com.wasp.fidelity.church_secretaria_service.presentation.dto.response.MemberResponse;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +13,27 @@ public abstract class MemberDtoMapper {
     @Autowired
     protected AddressDtoMapper addressDtoMapper;
 
-    public Member toDomain(MemberRequest request) {
 
-        if (request == null) {
+    public Member toDomain(CreateMemberRequest request) {
+
+        if(request == null) {
             return null;
         }
 
         return Member.create(
-                request.fullName(),
-                request.email(),
-                request.mobilePhone(),
-                request.dateOfBirth(),
-                request.baptismDate(),
-                addressDtoMapper.toDomain(request.address())
+                request.getFullName(),
+                request.getEmail(),
+                request.getMobilePhone(),
+                request.getDateOfBirth(),
+                request.getBaptismDate(),
+                addressDtoMapper.toDomain(request.getAddress())
         );
     }
-    public Member toDomainForUpdate(MemberRequest request) {
 
-        if (request == null) {
+
+    public Member toDomainForUpdate(UpdateMemberRequest request) {
+
+        if(request == null) {
             return null;
         }
 
@@ -43,6 +47,7 @@ public abstract class MemberDtoMapper {
                 .address(addressDtoMapper.toDomain(request.address()))
                 .build();
     }
+
 
     public abstract MemberResponse toResponse(Member member);
 }

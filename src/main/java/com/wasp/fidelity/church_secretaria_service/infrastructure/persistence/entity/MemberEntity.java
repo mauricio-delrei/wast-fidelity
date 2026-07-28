@@ -35,6 +35,7 @@ public class MemberEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false, unique = true)
     private String mobilePhone;
 
     private LocalDate baptismDate;
@@ -48,16 +49,16 @@ public class MemberEntity {
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column
-    private LocalDateTime deactivatedAt;
-
+    @Column(name = "updated_at", nullable = false)
     @LastModifiedDate
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column(name = "deactivated_at")
+    private LocalDateTime deactivatedAt;
 
     public void deactivate() {
 
